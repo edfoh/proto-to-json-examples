@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/edfoh/proto-to-json-poc/internal/protobuf"
-	"github.com/edfoh/proto-to-json-poc/internal/protoconvert"
+	"github.com/edfoh/proto-to-json-examples/internal/protobuf"
+	"github.com/edfoh/proto-to-json-examples/internal/protoconvert"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

@@ -6,9 +6,9 @@ import (
 	"os"
 	"text/template"
 
-	"github.com/edfoh/proto-to-json-poc/cmd/proto2json-templates/templates"
-	"github.com/edfoh/proto-to-json-poc/internal/protobuf"
-	"github.com/edfoh/proto-to-json-poc/internal/protoconvert"
+	"github.com/edfoh/proto-to-json-examples/cmd/proto2json-templates/templates"
+	"github.com/edfoh/proto-to-json-examples/internal/protobuf"
+	"github.com/edfoh/proto-to-json-examples/internal/protoconvert"
 	"google.golang.org/protobuf/proto"
 )
 

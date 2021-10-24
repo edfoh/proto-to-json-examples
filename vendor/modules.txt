@@ -2,7 +2,6 @@
 github.com/davecgh/go-spew/spew
 # github.com/golang/protobuf v1.5.2
 ## explicit
-github.com/golang/protobuf/ptypes/any
 github.com/golang/protobuf/ptypes/struct
 github.com/golang/protobuf/ptypes/wrappers
 # github.com/pmezard/go-difflib v1.0.0
@@ -40,7 +39,6 @@ google.golang.org/protobuf/reflect/protoreflect
 google.golang.org/protobuf/reflect/protoregistry
 google.golang.org/protobuf/runtime/protoiface
 google.golang.org/protobuf/runtime/protoimpl
-google.golang.org/protobuf/types/known/anypb
 google.golang.org/protobuf/types/known/structpb
 google.golang.org/protobuf/types/known/wrapperspb
 # gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c

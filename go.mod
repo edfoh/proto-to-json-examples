@@ -1,4 +1,4 @@
-module github.com/edfoh/proto-to-json-poc
+module github.com/edfoh/proto-to-json-examples
 
 go 1.16
 
