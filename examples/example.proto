@@ -1,0 +1,42 @@
+syntax = "proto3";
+package prototojson.example;
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/wrappers.proto";
+
+option go_package = "internal/protobuf";
+
+enum Role {
+	UNKNOWN = 0;
+	NORMAL = 1;
+	VIP = 2;
+}
+
+message Address {
+    repeated AddressLine lines = 1;
+}
+
+message AddressLine {
+    google.protobuf.StringValue value = 1;
+}
+
+message Discount {
+    google.protobuf.Int64Value max_discount = 1;
+}
+
+message FreeGift {
+    google.protobuf.BoolValue available = 1;
+}
+
+message Customer {
+	google.protobuf.Int64Value id = 1;
+	google.protobuf.StringValue name = 2;
+	google.protobuf.Struct attributes = 3;
+	Address address = 4;
+    Role role = 5;
+	repeated google.protobuf.StringValue extras = 6;
+	oneof privileges {
+		Discount discount = 7;
+		FreeGift free_gift = 8;
+	}
+}

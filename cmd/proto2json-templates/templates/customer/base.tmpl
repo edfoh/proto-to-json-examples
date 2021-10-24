@@ -1,0 +1,6 @@
+{{define "base"}}{
+    "id": "{{.id}}",
+    "name": "{{.name}}",
+    "attributes": {{marshalMapToJSON .attributes}},
+    {{template "oneOf" .}}
+}{{end}}
