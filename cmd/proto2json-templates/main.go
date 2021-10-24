@@ -1,10 +1,8 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
-	"text/template"
 
 	"github.com/edfoh/proto-to-json-examples/cmd/proto2json-templates/templates"
 	"github.com/edfoh/proto-to-json-examples/internal/protobuf"
@@ -14,8 +12,7 @@ import (
 
 func main() {
 	convertCustomer(protobuf.CustomerWithDiscount(), "discount")
-	fmt.Println()
-	fmt.Println()
+	fmt.Print("\n\n")
 	convertCustomer(protobuf.CustomerWithFreeGift(), "free_gift")
 }
 
@@ -28,7 +25,7 @@ func convertCustomer(customer proto.Message, oneOfName string) {
 		panic(err)
 	}
 
-	t, err := parseTemplate("customer", oneOfName)
+	t, err := templates.Parse("customer", oneOfName)
 	if err != nil {
 		fmt.Printf("error parsing template: %v", err)
 		panic(err)
@@ -39,24 +36,4 @@ func convertCustomer(customer proto.Message, oneOfName string) {
 		fmt.Printf("error executing template: %v", err)
 		panic(err)
 	}
-}
-
-func parseTemplate(tmplType string, oneOfName string) (*template.Template, error) {
-	name := fmt.Sprintf("%s-%s", tmplType, oneOfName)
-	filePatterns := []string{
-		fmt.Sprintf("%s/base.tmpl", tmplType),
-		fmt.Sprintf("%s/%s.tmpl", tmplType, oneOfName),
-	}
-	return template.New(name).Funcs(template.FuncMap{
-		"marshalMapToJSON": marshalMapToJSON,
-	}).ParseFS(templates.CustomerTemplateFiles, filePatterns...)
-}
-
-func marshalMapToJSON(m map[string]interface{}) string {
-	b, err := json.Marshal(m)
-	if err != nil {
-		fmt.Printf("error marshalMapToJSON: %v", err)
-		return ""
-	}
-	return string(b)
 }
