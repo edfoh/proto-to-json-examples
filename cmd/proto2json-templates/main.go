@@ -17,7 +17,7 @@ func main() {
 }
 
 func convertCustomer(customer proto.Message, oneOfName string) {
-	fmt.Printf("converting customer data with %s", oneOfName)
+	fmt.Printf("converting customer data with %s\n", oneOfName)
 
 	res, err := protoconvert.ToMap(customer, "privileges")
 	if err != nil {

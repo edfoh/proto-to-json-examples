@@ -2,5 +2,8 @@
     "id": "{{.id}}",
     "name": "{{.name}}",
     "attributes": {{marshalMapToJSON .attributes}},
+    "address": {{marshalMapToJSON .address}},
+    "role": "{{.role}}",
+    "extras": {{marshalMapToJSON .extras}},
     {{template "oneOf" .}}
 }{{end}}

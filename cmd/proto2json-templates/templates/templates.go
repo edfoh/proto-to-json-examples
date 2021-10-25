@@ -21,8 +21,8 @@ func Parse(tmplType string, oneOfName string) (*template.Template, error) {
 	}).ParseFS(customerTemplateFiles, filePatterns...)
 }
 
-func marshalMapToJSON(m map[string]interface{}) string {
-	b, err := json.Marshal(m)
+func marshalMapToJSON(v interface{}) string {
+	b, err := json.Marshal(v)
 	if err != nil {
 		fmt.Printf("error marshalMapToJSON: %v", err)
 		return ""
