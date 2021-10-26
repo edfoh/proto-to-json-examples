@@ -11,40 +11,71 @@ import (
 )
 
 type ProtoToMapResult struct {
-	DiscriminatorFieldName string
-	Out                    map[string]interface{}
+	OneOfFieldNames []string
+	Out             map[string]interface{}
 }
 
 // ToMap takes in a proto.Message and converts that to a map.
 //
-// if oneOfDiscriminatorFieldName is specified, it will inspect the proto message for the actual discriminator field name
-// in the oneOf specification.
-func ToMap(in proto.Message, oneOfDiscriminatorFieldName string) (*ProtoToMapResult, error) {
-	discriminatorFieldName, err := extractOneOfDiscriminatorFieldName(in, oneOfDiscriminatorFieldName)
+// if oneOfPaths is specified, it will inspect the proto message for the actual discriminator field name for
+// in the oneOf specification. The path should be 'event' or 'some_event.another' for nested oneOf
+//
+// returns a ProtoToMapResult
+func ToMap(in proto.Message, oneOfPaths ...string) (*ProtoToMapResult, error) {
+	oneOfFieldNames, err := extractOneOfPaths(in, oneOfPaths...)
 	if err != nil {
 		return nil, err
 	}
 
 	return &ProtoToMapResult{
-		DiscriminatorFieldName: discriminatorFieldName,
-		Out:                    extractProtoMessage(in),
+		OneOfFieldNames: oneOfFieldNames,
+		Out:             extractProtoMessage(in),
 	}, nil
 }
 
-func extractOneOfDiscriminatorFieldName(in proto.Message, oneOfDiscriminatorFieldName string) (string, error) {
-	if oneOfDiscriminatorFieldName == "" {
-		return "", nil
+func extractOneOfPaths(in proto.Message, oneOfPaths ...string) ([]string, error) {
+	var res []string
+	if oneOfPaths == nil || len(oneOfPaths) == 0 {
+		return res, nil
 	}
 
 	message := in.ProtoReflect()
-	oneOfDesc := message.Descriptor().Oneofs().ByName(protoreflect.Name(oneOfDiscriminatorFieldName))
+	for _, path := range oneOfPaths {
+		parts := strings.Split(path, ".")
+
+		if len(parts) == 1 {
+			out, err := extractOneOfFieldName(message, parts[0])
+			if err != nil {
+				return res, nil
+			}
+			res = append(res, out)
+			continue
+		}
+
+		fd := message.Descriptor().Fields().ByName(protoreflect.Name(parts[0]))
+		if fd.Kind() == protoreflect.MessageKind {
+			nextPath := strings.Join(parts[1:], ".")
+			value := message.Get(fd)
+			out, err := extractOneOfPaths(value.Message().Interface(), nextPath)
+			if err != nil {
+				return res, err
+			}
+			res = append(res, out...)
+		}
+	}
+
+	return res, nil
+}
+
+func extractOneOfFieldName(message protoreflect.Message, name string) (string, error) {
+	oneOfDesc := message.Descriptor().Oneofs().ByName(protoreflect.Name(name))
 	if oneOfDesc == nil {
-		return "", fmt.Errorf("unable to find oneOf field name '%s'", oneOfDiscriminatorFieldName)
+		return "", fmt.Errorf("unable to find oneOf field name '%s'", name)
 	}
 
 	oneOfFieldName := message.WhichOneof(oneOfDesc)
 	if oneOfFieldName == nil {
-		return "", fmt.Errorf("oneOf field name '%s' has no value populated", oneOfDiscriminatorFieldName)
+		return "", fmt.Errorf("oneOf field name '%s' has no value populated", name)
 	}
 
 	return string(oneOfFieldName.Name()), nil
@@ -73,9 +104,6 @@ func extractValue(fd protoreflect.FieldDescriptor, v protoreflect.Value) interfa
 		return extractMap(v.Map(), fd.MapValue())
 	}
 	if fd.Kind() == protoreflect.MessageKind {
-		if fd.ContainingOneof() != nil {
-
-		}
 		return extractValueFromMessage(v.Message().Interface())
 	}
 	if fd.Kind() == protoreflect.EnumKind {

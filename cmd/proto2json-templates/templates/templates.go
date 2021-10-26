@@ -4,18 +4,22 @@ import (
 	"embed"
 	"encoding/json"
 	"fmt"
+	"strings"
 	"text/template"
 )
 
 //go:embed customer
 var customerTemplateFiles embed.FS
 
-func Parse(tmplType string, oneOfName string) (*template.Template, error) {
-	name := fmt.Sprintf("%s-%s", tmplType, oneOfName)
+func Parse(tmplType string, oneOfNames ...string) (*template.Template, error) {
+	name := fmt.Sprintf("%s-%s", tmplType, strings.Join(oneOfNames, "-"))
 	filePatterns := []string{
 		fmt.Sprintf("%s/base.tmpl", tmplType),
-		fmt.Sprintf("%s/%s.tmpl", tmplType, oneOfName),
 	}
+	for _, name := range oneOfNames {
+		filePatterns = append(filePatterns, fmt.Sprintf("%s/%s.tmpl", tmplType, name))
+	}
+
 	return template.New(name).Funcs(template.FuncMap{
 		"marshalMapToJSON": marshalMapToJSON,
 	}).ParseFS(customerTemplateFiles, filePatterns...)

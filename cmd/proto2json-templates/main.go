@@ -11,21 +11,29 @@ import (
 )
 
 func main() {
-	convertCustomer(protobuf.CustomerWithDiscount(), "discount")
+	fmt.Print("converting customer data with discount.\n")
+	convertCustomer(protobuf.CustomerWithDiscount())
+
 	fmt.Print("\n\n")
-	convertCustomer(protobuf.CustomerWithFreeGift(), "free_gift")
+
+	fmt.Print("converting customer data with free gift - coupon.\n")
+	convertCustomer(protobuf.CustomerWithFreeGiftCoupon())
+
+	fmt.Print("\n\n")
+
+	fmt.Print("converting customer data with free gift - item.\n")
+	convertCustomer(protobuf.CustomerWithFreeGiftItem())
 }
 
-func convertCustomer(customer proto.Message, oneOfName string) {
-	fmt.Printf("converting customer data with %s\n", oneOfName)
+func convertCustomer(customer proto.Message) {
 
-	res, err := protoconvert.ToMap(customer, "privileges")
+	res, err := protoconvert.ToMap(customer, "privileges", "free_gift.gift")
 	if err != nil {
 		fmt.Printf("error executing template: %v", err)
 		panic(err)
 	}
 
-	t, err := templates.Parse("customer", oneOfName)
+	t, err := templates.Parse("customer", res.OneOfFieldNames...)
 	if err != nil {
 		fmt.Printf("error parsing template: %v", err)
 		panic(err)

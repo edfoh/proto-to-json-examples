@@ -25,7 +25,18 @@ message Discount {
 }
 
 message FreeGift {
-    google.protobuf.BoolValue available = 1;
+    oneof gift {
+		Coupon coupon = 1;
+		Item item = 2;
+	}
+}
+
+message Coupon {
+	google.protobuf.FloatValue value = 1;
+}
+
+message Item {
+	google.protobuf.StringValue item_code = 1;
 }
 
 message Customer {
@@ -33,7 +44,7 @@ message Customer {
 	google.protobuf.StringValue name = 2;
 	google.protobuf.Struct attributes = 3;
 	Address address = 4;
-  Role role = 5;
+    Role role = 5;
 	repeated google.protobuf.StringValue extras = 6;
 	oneof privileges {
 		Discount discount = 7;

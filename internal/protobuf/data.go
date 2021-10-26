@@ -16,11 +16,29 @@ func CustomerWithDiscount() proto.Message {
 	return c
 }
 
-func CustomerWithFreeGift() proto.Message {
+func CustomerWithFreeGiftCoupon() proto.Message {
 	c := customer()
 	c.Privileges = &Customer_FreeGift{
-		&FreeGift{
-			Available: wrapperspb.Bool(true),
+		FreeGift: &FreeGift{
+			Gift: &FreeGift_Coupon{
+				Coupon: &Coupon{
+					Value: wrapperspb.Float(100),
+				},
+			},
+		},
+	}
+	return c
+}
+
+func CustomerWithFreeGiftItem() proto.Message {
+	c := customer()
+	c.Privileges = &Customer_FreeGift{
+		FreeGift: &FreeGift{
+			Gift: &FreeGift_Item{
+				Item: &Item{
+					ItemCode: wrapperspb.String("ABC123"),
+				},
+			},
 		},
 	}
 	return c

@@ -42,6 +42,6 @@ func TestToMap(t *testing.T) {
 	js, _ := json.Marshal(res.Out)
 	fmt.Printf(string(js))
 
-	assert.Equal(t, "discount", res.DiscriminatorFieldName)
+	assert.Equal(t, []string{"discount"}, res.OneOfFieldNames)
 	assert.Equal(t, expected, res.Out)
 }
