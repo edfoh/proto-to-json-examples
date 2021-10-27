@@ -8,6 +8,11 @@ proto-gen:
 proto2json-templates:
 	@go run ./cmd/proto2json-templates/main.go
 
+.PHONY: proto2json-mappings
+## proto2json-mappings: runs proto2json-mappings
+proto2json-mappings:
+	@go run ./cmd/proto2json-mappings/main.go
+
 .PHONY: setup
 ## setup: installs protoc gen tool
 setup: 

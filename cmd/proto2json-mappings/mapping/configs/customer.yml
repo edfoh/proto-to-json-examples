@@ -1,0 +1,19 @@
+---
+version: 1.0.0
+name: customer
+mappings:
+- id:id
+- name:name
+- attributes:attributes
+- address:address
+- role:role
+- extras:extras
+oneOf:
+  field_name: privileges
+  discriminators:
+  - type: discount
+    mappings:
+      - max_discount:max_discount
+  - type: free_gift
+    mappings:
+      - available:available
