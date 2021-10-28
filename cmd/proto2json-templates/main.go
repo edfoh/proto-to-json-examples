@@ -1,47 +1,30 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
-	"os"
 
-	"github.com/edfoh/proto-to-json-examples/cmd/proto2json-templates/templates"
+	"github.com/edfoh/proto-to-json-examples/internal/customer"
 	"github.com/edfoh/proto-to-json-examples/internal/protobuf"
-	"github.com/edfoh/proto-to-json-examples/internal/protoconvert"
-	"google.golang.org/protobuf/proto"
 )
 
 func main() {
 	fmt.Print("converting customer data with discount.\n")
-	convertCustomer(protobuf.CustomerWithDiscount())
-
-	fmt.Print("\n\n")
+	printJSON(customer.Convert(protobuf.CustomerWithDiscount()))
 
 	fmt.Print("converting customer data with free gift - coupon.\n")
-	convertCustomer(protobuf.CustomerWithFreeGiftCoupon())
-
-	fmt.Print("\n\n")
+	printJSON(customer.Convert(protobuf.CustomerWithFreeGiftCoupon()))
 
 	fmt.Print("converting customer data with free gift - item.\n")
-	convertCustomer(protobuf.CustomerWithFreeGiftItem())
+	printJSON(customer.Convert(protobuf.CustomerWithFreeGiftItem()))
 }
 
-func convertCustomer(customer proto.Message) {
-
-	res, err := protoconvert.ToMap(customer, "privileges", "free_gift.gift")
-	if err != nil {
-		fmt.Printf("error executing template: %v", err)
-		panic(err)
+func printJSON(s string) {
+	var b bytes.Buffer
+	if err := json.Indent(&b, []byte(s), "", "  "); err != nil {
+		panic(fmt.Sprintf("error with printing customer: %v", err))
 	}
-
-	t, err := templates.Parse("customer", res.OneOfFieldNames...)
-	if err != nil {
-		fmt.Printf("error parsing template: %v", err)
-		panic(err)
-	}
-
-	err = t.ExecuteTemplate(os.Stdout, "base", res.Out)
-	if err != nil {
-		fmt.Printf("error executing template: %v", err)
-		panic(err)
-	}
+	fmt.Println(b.String())
+	fmt.Println()
 }

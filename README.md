@@ -69,34 +69,66 @@ and using go templates [base.tmpl](./cmd/proto2json-templates/templates/customer
 ```
 // base.tmpl
 {{define "base"}}{
-    "id": "{{.id}}",
-    "name": "{{.name}}",
-    "attributes": {{marshalMapToJSON .attributes}},
-    "address": {{marshalMapToJSON .address}},
-    "role": "{{.role}}",
-    "extras": {{marshalMapToJSON .extras}},
-    {{template "oneOf" .}}
+    "customer": {
+        "id": "{{.id}}",
+        "name": "{{.name}}",
+        "address": {{marshalMapToJSON .address}},
+        "misc": {
+            "attributes": {{marshalMapToJSON .attributes}},
+            "role": "{{.role}}",
+            "extras": {{marshalMapToJSON .extras}}
+        },
+        "privileges": {
+            {{template "oneOf1" .}}
+        }
+    }
 }{{end}}
 
 // discount.tmpl
-{{define "oneOf"}}"discount": {
-        "max_discount": {{.discount.max_discount}}
-    }{{end}}
+{{define "oneOf1"}}
+"discount": {
+    "max_discount": {{.discount.max_discount}}
+}{{end}}
 ```
 
 we can get these JSON outputs
 ``` json
 // customer with discount
 {
+  "customer": {
     "id": "1",
     "name": "david",
-    "attributes": {"card_id":1234,"phone":"(415) 555-1212","tags":["foo","bar"]},
-    "address": {"lines":[{"value":"line1"},{"value":"line2"}]},
-    "role": "normal",
-    "extras": ["1","2"],
-    "discount": {
+    "address": {
+      "lines": [
+        {
+          "value": "line1"
+        },
+        {
+          "value": "line2"
+        }
+      ]
+    },
+    "misc": {
+      "attributes": {
+        "card_id": 1234,
+        "phone": "(415) 555-1212",
+        "tags": [
+          "foo",
+          "bar"
+        ]
+      },
+      "role": "normal",
+      "extras": [
+        "1",
+        "2"
+      ]
+    },
+    "privileges": {
+      "discount": {
         "max_discount": 50
+      }
     }
+  }
 }
 ```
 

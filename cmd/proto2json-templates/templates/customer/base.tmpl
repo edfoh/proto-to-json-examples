@@ -1,9 +1,15 @@
 {{define "base"}}{
-    "id": "{{.id}}",
-    "name": "{{.name}}",
-    "attributes": {{marshalMapToJSON .attributes}},
-    "address": {{marshalMapToJSON .address}},
-    "role": "{{.role}}",
-    "extras": {{marshalMapToJSON .extras}},
-    {{template "oneOf1" .}}
+    "customer": {
+        "id": "{{.id}}",
+        "name": "{{.name}}",
+        "address": {{marshalMapToJSON .address}},
+        "misc": {
+            "attributes": {{marshalMapToJSON .attributes}},
+            "role": "{{.role}}",
+            "extras": {{marshalMapToJSON .extras}}
+        },
+        "privileges": {
+            {{template "oneOf1" .}}
+        }
+    }
 }{{end}}
