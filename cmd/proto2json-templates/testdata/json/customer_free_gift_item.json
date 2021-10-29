@@ -1,0 +1,38 @@
+{
+  "customer": {
+    "id": "1",
+    "name": "david",
+    "address": {
+      "lines": [
+        {
+          "value": "line1"
+        },
+        {
+          "value": "line2"
+        }
+      ]
+    },
+    "misc": {
+      "attributes": {
+        "card_id": 1234,
+        "phone": "(415) 555-1212",
+        "tags": [
+          "foo",
+          "bar"
+        ]
+      },
+      "role": "normal",
+      "extras": [
+        "1",
+        "2"
+      ]
+    },
+    "privileges": {
+      "free_gift": {
+        "item": {
+          "item_code": "ABC123"
+        }
+      }
+    }
+  }
+}

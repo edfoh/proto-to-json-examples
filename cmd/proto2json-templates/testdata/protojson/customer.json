@@ -1,0 +1,17 @@
+{
+  "id": "1",
+  "name": "david",
+  "attributes": {
+    "card_id": 1234,
+    "phone": "(415) 555-1212",
+    "tags": [
+      "foo",
+      "bar"
+    ]
+  },
+  "role": "NORMAL",
+  "extras":  [],
+  "discount": {
+    "maxDiscount": "50"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "id": "1",
+  "name": "david",
+  "attributes": {
+    "card_id": 1234,
+    "phone": "(415) 555-1212",
+    "tags": [
+      "foo",
+      "bar"
+    ]
+  },
+  "address": {
+    "lines": [
+      {
+        "value": "line1"
+      },
+      {
+        "value": "line2"
+      }
+    ]
+  },
+  "role": "NORMAL",
+  "extras": [
+    "1",
+    "2"
+  ],
+  "free_gift": {
+    "item": {
+      "item_code": "ABC123"
+    }
+  }
+}

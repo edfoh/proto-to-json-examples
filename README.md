@@ -148,4 +148,25 @@ The templates are located in this [folder](./cmd/proto2json-templates/templates)
 
 See [main.go](./cmd/proto2json-templates/main.go) to see how everything is hooked up.
 
+### Testing
+
+We are using [protojson](https://developers.google.com/protocol-buffers/docs/proto3#json) as source input files, which will go through the conversion. We will also have expected json output files that will be used to verify that they match the actual converted ones.
+
+```
+cmd/
+├─ proto2json-templates/
+│  ├─ testdata/
+│  │  ├─ protojson/
+│  │  │  ├─ customer.json
+│  │  │  ├─ ...
+│  │  ├─ json/
+│  │  │  ├─ customer_discount.json
+│  │  │  ├─ ...
+|  |─ main_test.go
+
+```
+
+To add more tests to cover the different scenarios, adding input files in `testdata/protojson` folder and expected output in `testdata/json` folder. The filenames need to match to execute a test case. 
+
+see [main_test.go](./cmd/proto2json-templates/main_test.go) for more details.
 
